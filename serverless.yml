@@ -1,0 +1,29 @@
+# Built using Serverless
+# Helithumper 2019
+
+service: hurricane-latest
+plugins:
+  - serverless-python-requirements
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+provider:
+  name: aws
+  runtime: python3.7
+  region: us-east-1
+  environment:
+    SLACK_URL: ${env:SLACK_URL}
+functions:
+  get_latest_graphic_and_post:
+    handler: handler.get_latest_graphic_and_post
+    events:
+    - schedule:
+        rate: cron(0 5,11,17,23 * * ? *)
+        enabled: true
+
+  get_latest_report_and_post:
+    handler: handler.get_latest_report_and_post
+    events:
+    - schedule:
+        rate: cron(0 */3 * * ? *)
+        enabled: true
